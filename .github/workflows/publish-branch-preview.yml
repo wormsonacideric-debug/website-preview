@@ -1,0 +1,49 @@
+name: Publish branch preview
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch in wormsonacideric-debug/website- to publish"
+        required: true
+        default: "perf/optimise-large-images"
+        type: string
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages-preview
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out preview workflow
+        uses: actions/checkout@v4
+
+      - name: Check out selected website branch
+        uses: actions/checkout@v4
+        with:
+          repository: wormsonacideric-debug/website-
+          ref: ${{ inputs.branch }}
+          path: site
+          fetch-depth: 1
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy preview
+        id: deployment
+        uses: actions/deploy-pages@v4
