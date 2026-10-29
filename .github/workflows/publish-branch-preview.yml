@@ -1,6 +1,9 @@
 name: Publish branch preview
 
 on:
+  push:
+    branches: [main]
+    paths: [.preview-trigger]
   workflow_dispatch:
     inputs:
       branch:
@@ -32,7 +35,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: wormsonacideric-debug/website-
-          ref: ${{ inputs.branch }}
+          ref: ${{ inputs.branch || 'fix/story-image-gap' }}
           path: site
           fetch-depth: 1
 
