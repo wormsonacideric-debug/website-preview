@@ -35,7 +35,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: wormsonacideric-debug/website-
-          ref: ${{ inputs.branch || 'fix/story-image-gap' }}
+          ref: ${{ inputs.branch || 'feature/journey-chapter-navigation' }}
           path: site
           fetch-depth: 1
 
